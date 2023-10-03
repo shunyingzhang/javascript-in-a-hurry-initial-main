@@ -134,7 +134,7 @@ function galleryHandler() {
 
 function populateProducts(productList) {
     let productsSection = document.querySelector(".products-area");
-    //productsSection.textContent = "";
+    productsSection.textContent = "";
 
     productList.forEach(function (product, index) {
         //Create HTML element for individaul product
@@ -181,7 +181,35 @@ function populateProducts(productList) {
 }
 
 function productsHandler() {
+    let freeProducts = products.filter(function(item){
+        return !item.price || item.price <= 0;
+    });
+    let paidProducts = products.filter(function(item){
+        return item.price > 0;
+    });
+
     populateProducts(products);
+
+    document.querySelector(".products-filter label[for=all] span.product-amount").textContent = products.length;
+    document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = paidProducts.length;
+    document.querySelector(".products-filter label[for=free] span.product-amount").textContent = freeProducts.length;
+
+    let productsFilter = document.querySelector(".products-filter");
+    
+    productsFilter.addEventListener("click", function(e){
+        if (e.target.id === "all") {
+            populateProducts(products);
+        } else if (e.target.id === "paid") {
+            populateProducts(paidProducts);
+        } else if (e.target.id === "free") {
+            populateProducts(freeProducts);
+        }
+    });
+}
+
+function footerHandler(){
+    let currentYear = new Date().getFullYear();
+    document.querySelector("footer").textContent = `Ⓒ ${currentYear} - All rights reserved`;
 }
 
 
@@ -191,3 +219,4 @@ greetingHandler();
 clockHandler();
 galleryHandler();
 productsHandler();
+footerHandler()
